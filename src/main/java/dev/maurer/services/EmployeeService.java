@@ -1,2 +1,2 @@
-package dev.maurer.services;public class EmployeeService {
+package dev.maurer.services;public interface EmployeeService {
 }
