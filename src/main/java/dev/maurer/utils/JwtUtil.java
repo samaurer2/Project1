@@ -1,2 +1,4 @@
-package dev.maurer.utils;public class JwtUtil {
+package dev.maurer.utils;
+
+public class JwtUtil {
 }

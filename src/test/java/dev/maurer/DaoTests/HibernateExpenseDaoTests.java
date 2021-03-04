@@ -1,6 +1,10 @@
 package dev.maurer.DaoTests;
 
 
+import dev.maurer.daos.EmployeeDAO;
+import dev.maurer.daos.ExpenseDAO;
+import dev.maurer.daos.HibernateEmployeeDAO;
+import dev.maurer.daos.HibernateExpenseDao;
 import dev.maurer.entities.Employee;
 import dev.maurer.entities.EmployeeType;
 import dev.maurer.entities.Expense;
@@ -16,11 +20,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ExpenseDaoTests {
+public class HibernateExpenseDaoTests {
 
 
     private static SessionFactory sf;
     private static Session session;
+    private static EmployeeDAO employeeDAO;
+    private static ExpenseDAO expenseDAO;
 
     @BeforeAll
     static void setUp() {
@@ -54,13 +60,16 @@ public class ExpenseDaoTests {
         exp3.setAmount(200.00);
         exp3.setReasonForExpense("Need even bigger backpack to hold more mushrooms");
 
-            session.beginTransaction();
-            session.save(e1);
-            session.save(e2);
-            session.save(m1);
-            session.save(exp1);
-            session.save(exp2);
-            session.save(exp3);
+        session.beginTransaction();
+        session.save(e1);
+        session.save(e2);
+        session.save(m1);
+        session.save(exp1);
+        session.save(exp2);
+        session.save(exp3);
+        session.close();
+        employeeDAO = new HibernateEmployeeDAO(sf);
+        expenseDAO = new HibernateExpenseDao(employeeDAO);
 
     }
 
@@ -72,20 +81,26 @@ public class ExpenseDaoTests {
 
     @Test
     @Order(1)
-    void test1() {
-        Assertions.fail();
+    void getExpensesEmployeeTest() {
+        Employee employee = new Employee("Teemo","The Swift Scout");
+        List<Expense> expenses = expenseDAO.viewAllExpenses(employee);
+        Assertions.assertTrue(expenses.size() == 2);
     }
 
     @Test
     @Order(2)
-    void test2() {
-        Assertions.fail();
+    void getExpensesManagerTest() {
+        Manager manager = new Manager("Dr. Mundo", "The Madman of Zaun");
+        List<Expense> expenses = expenseDAO.viewAllExpenses(manager);
+        Assertions.assertTrue(expenses.size()==3);
     }
 
     @Test
     @Order(3)
-    void test3() {
-        Assertions.fail();
+    void getExpense() {
+        Employee employee = new Employee("Teemo", "The Swift Scout");
+        Expense expense = expenseDAO.viewExpense(employee, 2);
+        Assertions.assertTrue(expense.getExpenseId() == 2);
     }
 
     @Test
