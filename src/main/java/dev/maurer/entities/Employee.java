@@ -1,5 +1,6 @@
 package dev.maurer.entities;
 
+import com.sun.istack.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -16,10 +17,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employeeId;
 
-    @Column(name = "user_name", unique = true)
+    @Column(name = "user_name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "user_password")
+    @Column(name = "user_password", nullable = false)
     private String password;
 
     @Column(name = "employee_type", insertable = false, updatable = false)

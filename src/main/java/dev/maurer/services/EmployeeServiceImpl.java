@@ -2,6 +2,7 @@ package dev.maurer.services;
 
 import dev.maurer.daos.EmployeeDAO;
 import dev.maurer.entities.Employee;
+import dev.maurer.exceptions.UserLoginException;
 
 public class EmployeeServiceImpl implements EmployeeService{
 
@@ -12,7 +13,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee login(Employee employee) {
+    public Employee login(Employee employee) throws UserLoginException {
         return employeeDAO.login(employee);
     }
 }

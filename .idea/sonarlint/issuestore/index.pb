@@ -23,12 +23,8 @@ j
 :src/main/java/dev/maurer/services/EmployeeServiceImpl.java,b\a\ba6c68e3923e12302c9ce8cafb06efab47a486d4
 j
 :src/test/java/dev/maurer/ServiceTests/EmployeeMatcher.java,f\c\fc4523c839efe53100aba7b38e8227953d4e77a7
-e
-5src/main/java/dev/maurer/daos/PostgresExpenseDao.java,f\9\f9edfe83610aefbfc2ed6b093630a8b08f118ceb
 [
 +src/main/java/dev/maurer/utils/JwtUtil.java,2\8\283c4e4a1cefc74913f7c1ca9553b7f737ef1bcb
-f
-6src/test/java/dev/maurer/DaoTests/ExpenseDaoTests.java,e\6\e6c7a4ec4255ce0e2e09cddce5d9a20ca6ebd4e8
 a
 1src/main/java/dev/maurer/utils/HibernateUtil.java,e\8\e8929c84792adb996892f9567d5f1fdad67568e4
 j
@@ -43,3 +39,7 @@ c
 3src/main/java/dev/maurer/entities/EmployeeType.java,e\a\ead7b9d19e4c23589bfb8d9080650ff7d3848906
 p
 @src/test/java/dev/maurer/DaoTests/HibernateEmployeeDoaTests.java,a\c\ac3ab9e5e51b80e445e82fabd121618a0fbc04fa
+o
+?src/test/java/dev/maurer/DaoTests/HibernateExpenseDaoTests.java,5\1\5199d12417b7bd68a8bc31ed59e03148b1f7f7c8
+f
+6src/main/java/dev/maurer/daos/HibernateExpenseDao.java,9\2\929ae97bdba7daa9ca5ac42828209f82026a4ea6

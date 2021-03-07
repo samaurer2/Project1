@@ -5,18 +5,12 @@ import dev.maurer.daos.EmployeeDAO;
 import dev.maurer.daos.ExpenseDAO;
 import dev.maurer.daos.HibernateEmployeeDAO;
 import dev.maurer.daos.HibernateExpenseDao;
-import dev.maurer.entities.Employee;
-import dev.maurer.entities.EmployeeType;
-import dev.maurer.entities.Expense;
-import dev.maurer.entities.Manager;
-import dev.maurer.utils.ConnectionUtil;
+import dev.maurer.entities.*;
 import dev.maurer.utils.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 
-import java.sql.Connection;
-import java.util.LinkedList;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -97,7 +91,7 @@ public class HibernateExpenseDaoTests {
 
     @Test
     @Order(3)
-    void getExpense() {
+    void getExpenseTest() {
         Employee employee = new Employee("Teemo", "The Swift Scout");
         Expense expense = expenseDAO.viewExpense(employee, 2);
         Assertions.assertTrue(expense.getExpenseId() == 2);
@@ -105,20 +99,37 @@ public class HibernateExpenseDaoTests {
 
     @Test
     @Order(4)
-    void test4() {
-        Assertions.fail();
+    void submitExpenseTest() {
+        Employee employee = new Employee("Teemo", "The Swift Scout");
+        Expense expense = new Expense(1000.0, "The biggest backpack to carry all the mushrooms");
+        expense = expenseDAO.submitExpense(employee, expense);
+
+        Assertions.assertNotEquals(0, expense.getExpenseId());
+        Assertions.assertNotEquals(0, expense.getDateSubmitted());
+        Assertions.assertEquals(ExpenseStatus.PENDING, expense.getExpenseStatus());
+        Assertions.assertEquals(3, expenseDAO.viewAllExpenses(employee).size());
     }
 
     @Test
     @Order(5)
-    void test5() {
-        Assertions.fail();
+    void getExpenseManagerTest() {
+        Manager manager = new Manager("Dr. Mundo", "The Madman of Zaun");
+        Expense expense = expenseDAO.viewExpense(manager, 2);
+        Assertions.assertTrue(expense.getExpenseId() == 2);
     }
 
     @Test
     @Order(6)
-    void test6() {
-        Assertions.fail();
+    void updateExpenseTest() {
+        Manager manager = new Manager("Dr. Mundo", "The Madman of Zaun");
+        Expense expense = expenseDAO.viewExpense(manager, 2);
+        expense.setExpenseStatus(ExpenseStatus.APPROVED);
+        expense.setReasonForApprovalDenial("Mundo agrees");
+
+        expense = expenseDAO.updateExpenseStatus(manager,expense);
+        Assertions.assertNotEquals(0, expense.getDateApprovedDenied());
+        Assertions.assertNotNull(expense.getReasonForApprovalDenial());
+        Assertions.assertEquals(ExpenseStatus.APPROVED, expense.getExpenseStatus());
 
     }
 

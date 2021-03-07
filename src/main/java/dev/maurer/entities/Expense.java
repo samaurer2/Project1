@@ -1,5 +1,7 @@
 package dev.maurer.entities;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,16 +13,16 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int expenseId;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     double amount;
 
-    @Column(name = "expense_reason")
+    @Column(name = "expense_reason", nullable = false)
     String reasonForExpense;
 
     @Column(name = "date_submitted")
     long dateSubmitted;
 
-    @Column(name ="expense_status")
+    @Column(name ="expense_status", nullable = false)
     @Enumerated(EnumType.STRING)
     ExpenseStatus expenseStatus;
 
@@ -34,6 +36,13 @@ public class Expense {
     Employee employee;
 
     public Expense() {
+        this.expenseStatus = ExpenseStatus.PENDING;
+    }
+
+    public Expense(double amount, String reasonForExpense) {
+        this.amount = amount;
+        this.reasonForExpense = reasonForExpense;
+        this.expenseStatus = ExpenseStatus.PENDING;
     }
 
     public int getExpenseId() {
