@@ -1,6 +1,5 @@
 package dev.maurer.entities;
 
-import com.sun.istack.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -32,6 +31,10 @@ public class Employee {
     List<Expense> expenses;
 
     public Employee() {
+    }
+
+    public Employee(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public Employee(String name, String password) {

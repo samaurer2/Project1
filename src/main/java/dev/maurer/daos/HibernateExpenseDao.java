@@ -9,9 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 public class HibernateExpenseDao implements ExpenseDAO {
@@ -27,14 +25,17 @@ public class HibernateExpenseDao implements ExpenseDAO {
     @Override
     public Expense submitExpense(Employee employee, Expense expense) {
         Employee emp = employeeDAO.login(employee);
+        if ((emp == null) || expense == null)
+            return null;
         try (Session session = sf.openSession()) {
             expense.setEmployee(emp);
             expense.setDateSubmitted(System.currentTimeMillis());
             expense.setExpenseStatus(ExpenseStatus.PENDING);
             session.beginTransaction();
             session.save(expense);
+            session.getTransaction().commit();
             return expense;
-        } catch (Exception e) {
+        } catch (Exception e){
             return null;
         }
     }
@@ -43,15 +44,22 @@ public class HibernateExpenseDao implements ExpenseDAO {
     public Expense viewExpense(Employee employee, int expenseId) {
 
         Employee emp = employeeDAO.login(employee);
+        System.out.println(employee);
+        if (emp == null)
+            return null;
         try (Session session = sf.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Expense> criteriaQuery = builder.createQuery(Expense.class);
             Root<Expense> root = criteriaQuery.from(Expense.class);
+
             if (emp instanceof Manager)
                 criteriaQuery.select(root).where(builder.equal(root.get("expenseId"), expenseId));
-            else
-                criteriaQuery.select(root).where(builder.equal(root.get("employee"), emp)).where(builder.equal(root.get("expenseId"), expenseId));
-
+            else {
+                Predicate p1 = builder.equal(root.get("employee"), emp.getEmployeeId());
+                Predicate p2 = builder.equal(root.get("expenseId"), expenseId);
+                Predicate p1Andp2 = builder.and(p1, p2);
+                criteriaQuery.select(root).where(p1Andp2);
+            }
             Query expenseQuery = session.createQuery(criteriaQuery);
             List<Expense> results = expenseQuery.getResultList();
 
@@ -67,6 +75,8 @@ public class HibernateExpenseDao implements ExpenseDAO {
 
 
         Employee emp = employeeDAO.login(employee);
+        if (emp == null)
+            return null;
         try (Session session = sf.openSession()) {
 
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -75,8 +85,8 @@ public class HibernateExpenseDao implements ExpenseDAO {
             criteriaQuery.select(root).where(builder.equal(root.get("employee"), emp));
 
             Query expenseQuery = session.createQuery(criteriaQuery);
-            List<Expense> results = expenseQuery.getResultList();
-
+            List<Expense> results= expenseQuery.getResultList();
+            results.size();
             return results;
         }
     }
@@ -85,6 +95,8 @@ public class HibernateExpenseDao implements ExpenseDAO {
     public List<Expense> viewAllExpenses(Manager manager) {
 
         Employee man = employeeDAO.login(manager);
+        if (man == null)
+            return null;
         try (Session session = sf.openSession()) {
 
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -102,6 +114,8 @@ public class HibernateExpenseDao implements ExpenseDAO {
     @Override
     public Expense updateExpenseStatus(Manager manager, Expense newExpense) {
         Employee man = employeeDAO.login(manager);
+        if (man == null)
+            return null;
         try (Session session = sf.openSession()) {
             Expense expense = session.load(Expense.class, newExpense.getExpenseId());
             if (newExpense.getExpenseStatus() != ExpenseStatus.PENDING) {

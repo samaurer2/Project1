@@ -25,7 +25,10 @@ public class HibernateEmployeeDAO implements EmployeeDAO {
             CriteriaBuilder builder = sf.getCriteriaBuilder();
             CriteriaQuery<Employee> criteriaQuery = builder.createQuery(Employee.class);
             Root<Employee> root = criteriaQuery.from(Employee.class);
-            criteriaQuery.select(root).where(builder.equal(root.get("name"), employee.getName())).where(builder.equal(root.get("password"), employee.getPassword()));
+
+            criteriaQuery.select(root)
+                    .where(builder.equal(root.get("name"), employee.getName()))
+                    .where(builder.equal(root.get("password"), employee.getPassword()));
 
             Query query = session.createQuery(criteriaQuery);
             List<Employee> results = query.getResultList();
@@ -36,6 +39,28 @@ public class HibernateEmployeeDAO implements EmployeeDAO {
                 results.get(0).setExpenses(null);
                 return results.get(0);
             }
+        }
+    }
+
+    @Override
+    public Employee getEmployeeById(int employeeId) {
+        try(Session session = sf.openSession()) {
+
+            CriteriaBuilder builder = sf.getCriteriaBuilder();
+            CriteriaQuery<Employee> criteriaQuery = builder.createQuery(Employee.class);
+            Root<Employee> root = criteriaQuery.from(Employee.class);
+            criteriaQuery.select(root).where(builder.equal(root.get("employeeId"), employeeId));
+
+            Query query = session.createQuery(criteriaQuery);
+            List<Employee> results = query.getResultList();
+
+            if (results.size() != 1)
+                return null;
+            else {
+                results.get(0).setExpenses(null);
+                return results.get(0);
+            }
+
         }
     }
 }

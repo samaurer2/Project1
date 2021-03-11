@@ -6,4 +6,6 @@ import dev.maurer.entities.Manager;
 public interface EmployeeDAO {
 
     public Employee login(Employee employee);
+
+    public Employee getEmployeeById(int employeeId);
 }

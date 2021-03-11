@@ -1,7 +1,5 @@
 package dev.maurer.entities;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 
 @Entity
@@ -32,7 +30,7 @@ public class Expense {
     @Column(name = "approval_reason")
     String reasonForApprovalDenial;
 
-    @ManyToOne()
+    @ManyToOne
     Employee employee;
 
     public Expense() {

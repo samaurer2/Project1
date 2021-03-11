@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
+import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class HibernateExpenseDaoTests {
@@ -131,6 +132,57 @@ public class HibernateExpenseDaoTests {
         Assertions.assertNotNull(expense.getReasonForApprovalDenial());
         Assertions.assertEquals(ExpenseStatus.APPROVED, expense.getExpenseStatus());
 
+    }
+
+    @Test
+    @Order(7)
+    void submitNonExistentEmployeeTest() {
+        Employee employee = new Employee("Dr. Mundo", "The Manager");
+        Expense expense = new Expense(1000.0, "The biggest backpack to carry all the mushrooms");
+        expense = expenseDAO.submitExpense(employee, expense);
+        Assertions.assertNull(expense);
+    }
+
+    @Test
+    @Order(8)
+    void viewAllExpensesNonExistentEmployeeTest() {
+        Employee employee = new Employee("Dr. Mundo", "The Manager");
+        List<Expense> expenses = expenseDAO.viewAllExpenses(employee);
+        Assertions.assertNull(expenses);
+    }
+
+    @Test
+    @Order(9)
+    void viewAllExpensesNonExistentManagerTest() {
+        Manager employee = new Manager("Dr. Mundo", "The Manager");
+        List<Expense> expenses = expenseDAO.viewAllExpenses(employee);
+        Assertions.assertNull(expenses);
+    }
+
+    @Test
+    @Order(10)
+    void viewNonExistentExpenseTest() {
+        Employee employee = new Employee("Dr. Mundo", "The Manager");
+        Expense expenses = expenseDAO.viewExpense(employee, 100);
+        Assertions.assertNull(expenses);
+    }
+
+    @Test
+    @Order(11)
+    void viewAllNonExistentManagerExpensesTest() {
+        Employee employee = new Manager("Dr. Mundo", "The Manager");
+        List<Expense> expenses = expenseDAO.viewAllExpenses(employee);
+        Assertions.assertNull(expenses);
+    }
+    @Test
+    @Order(12)
+    void updateExpenseNonExistantManagerTest(){
+        Manager employee = new Manager("Dr. Mundo", "The Manager");
+        Expense expense = new Expense();
+        expense.setExpenseId(3);
+        expense.setExpenseStatus(ExpenseStatus.APPROVED);
+        expense = expenseDAO.updateExpenseStatus(employee, expense);
+        Assertions.assertNull(expense);
     }
 
 }

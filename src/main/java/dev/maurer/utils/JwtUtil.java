@@ -6,7 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import dev.maurer.entities.EmployeeType;
 
 public class JwtUtil {
-    private static final String SECRET ="I always ban Yasuo.";
+    private static final String SECRET = "I always ban Yasuo.";
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET);
 
     public static String generate(String type, String employeeName, int employeeId){

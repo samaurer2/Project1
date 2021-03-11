@@ -16,5 +16,7 @@ public class HibernateUtil {
         }
         return sf;
     }
-
+    public static void closeFactory() {
+        sf = null;
+    }
 }
