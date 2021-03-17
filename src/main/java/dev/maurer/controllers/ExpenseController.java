@@ -3,19 +3,20 @@ package dev.maurer.controllers;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
-import dev.maurer.entities.Employee;
-import dev.maurer.entities.EmployeeType;
-import dev.maurer.entities.Expense;
-import dev.maurer.entities.Manager;
+import dev.maurer.entities.*;
 import dev.maurer.exceptions.ExpenseNotFoundException;
 import dev.maurer.exceptions.SubmissionException;
+import dev.maurer.exceptions.SubmissionFormatException;
 import dev.maurer.services.EmployeeService;
 import dev.maurer.services.ExpenseService;
 import dev.maurer.utils.JwtUtil;
 import io.javalin.http.Handler;
 
 
+import java.util.Collections;
 import java.util.List;
+
+import static dev.maurer.app.App.logger;
 
 public class ExpenseController {
 
@@ -47,9 +48,9 @@ public class ExpenseController {
     }
 
     public Handler submitExpenseHandler = ctx -> {
+        String jwt = ctx.header("Authorization");
         try {
             String body = ctx.body();
-            String jwt = ctx.header("Authorization");
             DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);
             Employee employee = getEmployee(decodedJWT);
 
@@ -58,25 +59,30 @@ public class ExpenseController {
 
             Expense expense = gson.fromJson(body, Expense.class);
             expense = expenseService.submitExpense(employee, expense);
+            expense.setEmployee(null);
             ctx.result(gson.toJson(expense));
             ctx.status(201);
 
         } catch (JWTVerificationException e) {
+            logger.warn("Unauthorized JWT: " + jwt);
             ctx.result("Invalid authorization");
             ctx.status(403);
         } catch (SubmissionException e) {
-            ctx.result("Managers cannot submit expenses");
+            ctx.result(e.getMessage());
             ctx.status(403);
+        } catch (SubmissionFormatException e) {
+            ctx.result(e.getMessage());
+            ctx.status(400);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             ctx.result("Error");
             ctx.status(400);
         }
     };
 
     public Handler getExpensesHandler = ctx -> {
+        String jwt = ctx.header("Authorization");
         try {
-            String jwt = ctx.header("Authorization");
-            System.out.println(jwt);
             DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);
             Employee employee = getEmployee(decodedJWT);
 
@@ -89,20 +95,21 @@ public class ExpenseController {
             for (Expense e : allExpenses) {
                 e.setEmployee(null); //sanitize employee to prevent LazyInitializationException or infinite json
             }
-
+            Collections.sort(allExpenses);
             String expenses = gson.toJson(allExpenses);
             ctx.result(expenses);
             ctx.status(200);
 
         } catch (JWTVerificationException e) {
+            logger.warn("Unauthorized JWT: " + jwt);
             ctx.result("Invalid authorization");
             ctx.status(403);
         }
     };
 
     public Handler getExpenseByIdHandler = ctx -> {
+        String jwt = ctx.header("Authorization");
         try {
-            String jwt = ctx.header("Authorization");
             DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);
             Employee employee = getEmployee(decodedJWT);
             Expense expense = expenseService.viewExpense(employee, Integer.parseInt(ctx.pathParam("id")));
@@ -110,6 +117,7 @@ public class ExpenseController {
             ctx.result(gson.toJson(expense));
             ctx.status(200);
         } catch (JWTVerificationException e) {
+            logger.warn("Unauthorized JWT: " + jwt);
             ctx.result("Invalid authorization");
             ctx.status(403);
         } catch (ExpenseNotFoundException e) {
@@ -120,17 +128,21 @@ public class ExpenseController {
     };
 
     public Handler updateExpenseHandler = ctx -> {
+        String jwt = ctx.header("Authorization");
         try {
-            String jwt = ctx.header("Authorization");
             DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);
             Employee manager = getEmployee(decodedJWT);
 
             if (manager instanceof Manager) {
-               String body = ctx.body();
+                String body = ctx.body();
                 int expenseId = Integer.parseInt(ctx.pathParam("id"));
                 Expense expense = gson.fromJson(body, Expense.class);
+                if (expense.getExpenseStatus() == ExpenseStatus.PENDING || expense.getExpenseStatus() == null)
+                    throw new SubmissionException("Expense update must have a status that is not pending");
                 expense.setExpenseId(expenseId);
-                expenseService.updateExpenseStatus((Manager)manager, expense);
+                expense = expenseService.updateExpenseStatus((Manager) manager, expense);
+                expense.setEmployee(null);
+                System.out.println(expense);
                 ctx.result(gson.toJson(expense));
                 ctx.status(200);
 
@@ -138,11 +150,15 @@ public class ExpenseController {
                 throw new JWTVerificationException(jwt);
             }
         } catch (JWTVerificationException e) {
+            logger.warn("Unauthorized JWT: " + jwt);
             ctx.result("Invalid authorization");
             ctx.status(403);
         } catch (ExpenseNotFoundException e) {
             ctx.result("Expense not found");
             ctx.status(404);
+        } catch (SubmissionException e) {
+            ctx.result(e.getMessage());
+            ctx.status(400);
         }
     };
 }

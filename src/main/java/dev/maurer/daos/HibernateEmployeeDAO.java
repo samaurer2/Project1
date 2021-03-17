@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -26,9 +27,10 @@ public class HibernateEmployeeDAO implements EmployeeDAO {
             CriteriaQuery<Employee> criteriaQuery = builder.createQuery(Employee.class);
             Root<Employee> root = criteriaQuery.from(Employee.class);
 
-            criteriaQuery.select(root)
-                    .where(builder.equal(root.get("name"), employee.getName()))
-                    .where(builder.equal(root.get("password"), employee.getPassword()));
+            Predicate p1 = builder.equal(root.get("name"), employee.getName());
+            Predicate p2 = builder.equal(root.get("password"), employee.getPassword());
+            Predicate predicate = builder.and(p1, p2);
+            criteriaQuery.select(root).where(predicate);
 
             Query query = session.createQuery(criteriaQuery);
             List<Employee> results = query.getResultList();

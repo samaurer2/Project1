@@ -90,12 +90,16 @@ public class ExpenseServiceTests {
     @Test
     @Order(1)
     void submitExpenseServiceTest() {
-        Expense expense = new Expense(100.00, "The big dummy data");
-        Employee employee = new Employee("Annie", "The Dark Child");
+        try {
+            Expense expense = new Expense(100.00, "The big dummy data");
+            Employee employee = new Employee("Annie", "The Dark Child");
 
-        expense = expenseService.submitExpense(employee, expense);
-        Assertions.assertNotNull(expense);
-    }
+            expense = expenseService.submitExpense(employee, expense);
+            Assertions.assertNotNull(expense);
+        } catch (Exception e) {
+            Assertions.fail();
+        }
+        }
 
     @Test
     @Order(2)

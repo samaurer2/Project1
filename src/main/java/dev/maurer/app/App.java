@@ -12,12 +12,19 @@ import dev.maurer.services.ExpenseService;
 import dev.maurer.services.ExpenseServiceImpl;
 import dev.maurer.utils.HibernateUtil;
 import io.javalin.Javalin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class App {
 
+    public static final Logger logger = LoggerFactory.getLogger(App.class);
     public static void main(String[] args) {
-        Javalin app = Javalin.create();
-
+        Javalin app = Javalin.create(
+                config -> {
+                    config.enableCorsForAllOrigins();// allows the server to process JS requests from anywhere
+                }
+        );
+        //hello
         EmployeeDAO employeeDAO = new HibernateEmployeeDAO(HibernateUtil.getSessionFactory(false));
         EmployeeService employeeService = new EmployeeServiceImpl(employeeDAO);
         EmployeeController employeeController = new EmployeeController(employeeService);

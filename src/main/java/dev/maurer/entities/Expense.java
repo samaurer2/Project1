@@ -1,37 +1,39 @@
 package dev.maurer.entities;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="expense")
-public class Expense {
+public class Expense implements Comparable{
 
     @Id
     @Column(name="expense_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int expenseId;
+    private Integer expenseId;
 
     @Column(name = "amount", nullable = false)
-    double amount;
+    private Double amount;
 
     @Column(name = "expense_reason", nullable = false)
-    String reasonForExpense;
+    private String reasonForExpense;
 
     @Column(name = "date_submitted")
-    long dateSubmitted;
+    private Long dateSubmitted;
 
     @Column(name ="expense_status", nullable = false)
     @Enumerated(EnumType.STRING)
-    ExpenseStatus expenseStatus;
+    private ExpenseStatus expenseStatus;
 
     @Column(name = "date_approved")
-    long dateApprovedDenied;
+    private Long dateApprovedDenied;
 
     @Column(name = "approval_reason")
-    String reasonForApprovalDenial;
+    private String reasonForApprovalDenial;
 
     @ManyToOne
-    Employee employee;
+    private Employee employee;
 
     public Expense() {
         this.expenseStatus = ExpenseStatus.PENDING;
@@ -43,7 +45,7 @@ public class Expense {
         this.expenseStatus = ExpenseStatus.PENDING;
     }
 
-    public int getExpenseId() {
+    public Integer getExpenseId() {
         return expenseId;
     }
 
@@ -51,7 +53,7 @@ public class Expense {
         this.expenseId = expenseId;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -67,7 +69,7 @@ public class Expense {
         this.reasonForExpense = reasonForExpense;
     }
 
-    public long getDateSubmitted() {
+    public Long getDateSubmitted() {
         return dateSubmitted;
     }
 
@@ -83,7 +85,7 @@ public class Expense {
         this.expenseStatus = expenseStatus;
     }
 
-    public long getDateApprovedDenied() {
+    public Long getDateApprovedDenied() {
         return dateApprovedDenied;
     }
 
@@ -119,5 +121,24 @@ public class Expense {
                 ", reasonForApprovalDenial='" + reasonForApprovalDenial + '\'' +
                 ", employee=" + employee +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull Object object) {
+        Expense expense = (Expense) object;
+
+        if (this.expenseStatus.ordinal() > expense.getExpenseStatus().ordinal())
+            return 1;
+
+        if (this.expenseStatus.ordinal() < expense.getExpenseStatus().ordinal())
+            return -1;
+
+        if(this.dateSubmitted > expense.getDateSubmitted())
+            return -1;
+
+        if(this.dateSubmitted < expense.getDateSubmitted())
+            return 1;
+
+        return 0;
     }
 }

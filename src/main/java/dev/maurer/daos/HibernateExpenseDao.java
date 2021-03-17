@@ -118,13 +118,16 @@ public class HibernateExpenseDao implements ExpenseDAO {
             return null;
         try (Session session = sf.openSession()) {
             Expense expense = session.load(Expense.class, newExpense.getExpenseId());
+           System.out.println(expense);
             if (newExpense.getExpenseStatus() != ExpenseStatus.PENDING) {
                 expense.setExpenseStatus(newExpense.getExpenseStatus());
                 expense.setReasonForApprovalDenial(newExpense.getReasonForApprovalDenial());
                 expense.setDateApprovedDenied(System.currentTimeMillis());
             }
-            session.save(expense);
-            return expense;
+            session.beginTransaction();
+            session.update(expense);
+            session.getTransaction().commit();
+            return viewExpense(manager, newExpense.getExpenseId());
         }
     }
 }

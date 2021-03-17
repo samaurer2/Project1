@@ -10,12 +10,14 @@ public class HibernateUtil {
     public static SessionFactory getSessionFactory(boolean testing) {
         if (sf == null) {
             Configuration cfg = new Configuration();
-            if(testing)
-                cfg.setProperty("hibernate.hbm2ddl.auto","create");
-            sf = cfg.configure().buildSessionFactory();
+            if (testing)
+                sf = cfg.configure("test.cfg.xml").buildSessionFactory();
+            else
+                sf = cfg.configure("hibernate.cfg.xml").buildSessionFactory();
         }
         return sf;
     }
+
     public static void closeFactory() {
         sf = null;
     }
