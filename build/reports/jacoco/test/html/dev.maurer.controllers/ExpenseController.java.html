@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExpenseController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project1</a> &gt; <a href="index.source.html" class="el_package">dev.maurer.controllers</a> &gt; <span class="el_source">ExpenseController.java</span></div><h1>ExpenseController.java</h1><pre class="source lang-java linenums">package dev.maurer.controllers;
+
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.gson.Gson;
+import dev.maurer.entities.*;
+import dev.maurer.exceptions.ExpenseNotFoundException;
+import dev.maurer.exceptions.SubmissionException;
+import dev.maurer.exceptions.SubmissionFormatException;
+import dev.maurer.services.EmployeeService;
+import dev.maurer.services.ExpenseService;
+import dev.maurer.utils.JwtUtil;
+import io.javalin.http.Handler;
+
+
+import java.util.Collections;
+import java.util.List;
+
+import static dev.maurer.app.App.logger;
+
+public class ExpenseController {
+
+    private ExpenseService expenseService;
+    private EmployeeService employeeService;
+    private Gson gson;
+
+<span class="nc" id="L27">    public ExpenseController(ExpenseService expenseService, EmployeeService employeeService) {</span>
+<span class="nc" id="L28">        this.expenseService = expenseService;</span>
+<span class="nc" id="L29">        this.employeeService = employeeService;</span>
+<span class="nc" id="L30">        gson = new Gson();</span>
+<span class="nc" id="L31">    }</span>
+
+    private Employee getEmployee(DecodedJWT decodedJWT) {
+        try {
+<span class="nc" id="L35">            Integer id = decodedJWT.getClaim(&quot;employeeId&quot;).asInt();</span>
+<span class="nc" id="L36">            String type = decodedJWT.getClaim(&quot;type&quot;).asString();</span>
+
+<span class="nc bnc" id="L38" title="All 4 branches missed.">            if (id == null || type == null)</span>
+<span class="nc" id="L39">                return null;</span>
+
+<span class="nc bnc" id="L41" title="All 4 branches missed.">            if (type.equals(EmployeeType.EMPLOYEE.toString()) || type.equals(EmployeeType.MANAGER.toString()))</span>
+<span class="nc" id="L42">                return employeeService.getEmployeeById(id);</span>
+
+<span class="nc" id="L44">            return null;</span>
+<span class="nc" id="L45">        } catch (Exception e) {</span>
+<span class="nc" id="L46">            return null;</span>
+        }
+    }
+
+<span class="nc" id="L50">    public Handler submitExpenseHandler = ctx -&gt; {</span>
+<span class="nc" id="L51">        String jwt = ctx.header(&quot;Authorization&quot;);</span>
+        try {
+<span class="nc" id="L53">            String body = ctx.body();</span>
+<span class="nc" id="L54">            DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);</span>
+<span class="nc" id="L55">            Employee employee = getEmployee(decodedJWT);</span>
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (employee instanceof Manager)</span>
+<span class="nc" id="L58">                throw new SubmissionException(&quot;Managers cannot submit Expenses&quot;);</span>
+
+<span class="nc" id="L60">            Expense expense = gson.fromJson(body, Expense.class);</span>
+<span class="nc" id="L61">            expense = expenseService.submitExpense(employee, expense);</span>
+<span class="nc" id="L62">            expense.setEmployee(null);</span>
+<span class="nc" id="L63">            ctx.result(gson.toJson(expense));</span>
+<span class="nc" id="L64">            ctx.status(201);</span>
+
+<span class="nc" id="L66">        } catch (JWTVerificationException e) {</span>
+<span class="nc" id="L67">            logger.warn(&quot;Unauthorized JWT: &quot; + jwt);</span>
+<span class="nc" id="L68">            ctx.result(&quot;Invalid authorization&quot;);</span>
+<span class="nc" id="L69">            ctx.status(403);</span>
+<span class="nc" id="L70">        } catch (SubmissionException e) {</span>
+<span class="nc" id="L71">            ctx.result(e.getMessage());</span>
+<span class="nc" id="L72">            ctx.status(403);</span>
+<span class="nc" id="L73">        } catch (SubmissionFormatException e) {</span>
+<span class="nc" id="L74">            ctx.result(e.getMessage());</span>
+<span class="nc" id="L75">            ctx.status(400);</span>
+<span class="nc" id="L76">        } catch (Exception e) {</span>
+<span class="nc" id="L77">            logger.error(e.getMessage());</span>
+<span class="nc" id="L78">            ctx.result(&quot;Error&quot;);</span>
+<span class="nc" id="L79">            ctx.status(400);</span>
+<span class="nc" id="L80">        }</span>
+<span class="nc" id="L81">    };</span>
+
+<span class="nc" id="L83">    public Handler getExpensesHandler = ctx -&gt; {</span>
+<span class="nc" id="L84">        String jwt = ctx.header(&quot;Authorization&quot;);</span>
+        try {
+<span class="nc" id="L86">            DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);</span>
+<span class="nc" id="L87">            Employee employee = getEmployee(decodedJWT);</span>
+
+            List&lt;Expense&gt; allExpenses;
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            if (employee instanceof Manager)</span>
+<span class="nc" id="L91">                allExpenses = expenseService.viewAllExpenses((Manager) employee);</span>
+            else
+<span class="nc" id="L93">                allExpenses = expenseService.viewAllExpenses(employee);</span>
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            for (Expense e : allExpenses) {</span>
+<span class="nc" id="L96">                e.setEmployee(null); //sanitize employee to prevent LazyInitializationException or infinite json</span>
+<span class="nc" id="L97">            }</span>
+<span class="nc" id="L98">            Collections.sort(allExpenses);</span>
+<span class="nc" id="L99">            String expenses = gson.toJson(allExpenses);</span>
+<span class="nc" id="L100">            ctx.result(expenses);</span>
+<span class="nc" id="L101">            ctx.status(200);</span>
+
+<span class="nc" id="L103">        } catch (JWTVerificationException e) {</span>
+<span class="nc" id="L104">            logger.warn(&quot;Unauthorized JWT: &quot; + jwt);</span>
+<span class="nc" id="L105">            ctx.result(&quot;Invalid authorization&quot;);</span>
+<span class="nc" id="L106">            ctx.status(403);</span>
+<span class="nc" id="L107">        }</span>
+<span class="nc" id="L108">    };</span>
+
+<span class="nc" id="L110">    public Handler getExpenseByIdHandler = ctx -&gt; {</span>
+<span class="nc" id="L111">        String jwt = ctx.header(&quot;Authorization&quot;);</span>
+        try {
+<span class="nc" id="L113">            DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);</span>
+<span class="nc" id="L114">            Employee employee = getEmployee(decodedJWT);</span>
+<span class="nc" id="L115">            Expense expense = expenseService.viewExpense(employee, Integer.parseInt(ctx.pathParam(&quot;id&quot;)));</span>
+<span class="nc" id="L116">            expense.setEmployee(null);</span>
+<span class="nc" id="L117">            ctx.result(gson.toJson(expense));</span>
+<span class="nc" id="L118">            ctx.status(200);</span>
+<span class="nc" id="L119">        } catch (JWTVerificationException e) {</span>
+<span class="nc" id="L120">            logger.warn(&quot;Unauthorized JWT: &quot; + jwt);</span>
+<span class="nc" id="L121">            ctx.result(&quot;Invalid authorization&quot;);</span>
+<span class="nc" id="L122">            ctx.status(403);</span>
+<span class="nc" id="L123">        } catch (ExpenseNotFoundException e) {</span>
+<span class="nc" id="L124">            ctx.result(&quot;No expense found&quot;);</span>
+<span class="nc" id="L125">            ctx.status(404);</span>
+<span class="nc" id="L126">        }</span>
+
+<span class="nc" id="L128">    };</span>
+
+<span class="nc" id="L130">    public Handler updateExpenseHandler = ctx -&gt; {</span>
+<span class="nc" id="L131">        String jwt = ctx.header(&quot;Authorization&quot;);</span>
+        try {
+<span class="nc" id="L133">            DecodedJWT decodedJWT = JwtUtil.isValidJWT(jwt);</span>
+<span class="nc" id="L134">            Employee manager = getEmployee(decodedJWT);</span>
+
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            if (manager instanceof Manager) {</span>
+<span class="nc" id="L137">                String body = ctx.body();</span>
+<span class="nc" id="L138">                int expenseId = Integer.parseInt(ctx.pathParam(&quot;id&quot;));</span>
+<span class="nc" id="L139">                Expense expense = gson.fromJson(body, Expense.class);</span>
+<span class="nc bnc" id="L140" title="All 4 branches missed.">                if (expense.getExpenseStatus() == ExpenseStatus.PENDING || expense.getExpenseStatus() == null)</span>
+<span class="nc" id="L141">                    throw new SubmissionException(&quot;Expense update must have a status that is not pending&quot;);</span>
+<span class="nc" id="L142">                expense.setExpenseId(expenseId);</span>
+<span class="nc" id="L143">                expense = expenseService.updateExpenseStatus((Manager) manager, expense);</span>
+<span class="nc" id="L144">                expense.setEmployee(null);</span>
+<span class="nc" id="L145">                System.out.println(expense);</span>
+<span class="nc" id="L146">                ctx.result(gson.toJson(expense));</span>
+<span class="nc" id="L147">                ctx.status(200);</span>
+
+<span class="nc" id="L149">            } else {</span>
+<span class="nc" id="L150">                throw new JWTVerificationException(jwt);</span>
+            }
+<span class="nc" id="L152">        } catch (JWTVerificationException e) {</span>
+<span class="nc" id="L153">            logger.warn(&quot;Unauthorized JWT: &quot; + jwt);</span>
+<span class="nc" id="L154">            ctx.result(&quot;Invalid authorization&quot;);</span>
+<span class="nc" id="L155">            ctx.status(403);</span>
+<span class="nc" id="L156">        } catch (ExpenseNotFoundException e) {</span>
+<span class="nc" id="L157">            ctx.result(&quot;Expense not found&quot;);</span>
+<span class="nc" id="L158">            ctx.status(404);</span>
+<span class="nc" id="L159">        } catch (SubmissionException e) {</span>
+<span class="nc" id="L160">            ctx.result(e.getMessage());</span>
+<span class="nc" id="L161">            ctx.status(400);</span>
+<span class="nc" id="L162">        }</span>
+<span class="nc" id="L163">    };</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,7 @@
+
+U	java:S106/"9Replace this use of System.out or System.err by a logger.(¼¡¨ò8°ï’ı/
+|
+java:S1488l"_Immediately return this expression instead of assigning it to the temporary variable "results".(¾Ô­°8¦ƒã€/
+J
+java:S2201Y"(The return value of "size" must be used.(ÏííÉÿÿÿÿÿ8•†õƒ/
+U	java:S106y"9Replace this use of System.out or System.err by a logger.(ÉŸ‡Õ8—ÄÔ‘‚/

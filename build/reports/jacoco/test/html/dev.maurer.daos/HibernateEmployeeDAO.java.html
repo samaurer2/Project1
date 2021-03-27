@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HibernateEmployeeDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project1</a> &gt; <a href="index.source.html" class="el_package">dev.maurer.daos</a> &gt; <span class="el_source">HibernateEmployeeDAO.java</span></div><h1>HibernateEmployeeDAO.java</h1><pre class="source lang-java linenums">package dev.maurer.daos;
+
+import dev.maurer.entities.Employee;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
+
+public class HibernateEmployeeDAO implements EmployeeDAO {
+
+    private SessionFactory sf;
+
+<span class="fc" id="L18">    public HibernateEmployeeDAO(SessionFactory sf) {</span>
+<span class="fc" id="L19">        this.sf = sf;</span>
+<span class="fc" id="L20">    }</span>
+
+    @Override
+    public Employee login(Employee employee) {
+
+<span class="fc" id="L25">        try (Session session = sf.openSession()) {</span>
+<span class="fc" id="L26">            CriteriaBuilder builder = sf.getCriteriaBuilder();</span>
+<span class="fc" id="L27">            CriteriaQuery&lt;Employee&gt; criteriaQuery = builder.createQuery(Employee.class);</span>
+<span class="fc" id="L28">            Root&lt;Employee&gt; root = criteriaQuery.from(Employee.class);</span>
+
+<span class="fc" id="L30">            Predicate p1 = builder.equal(root.get(&quot;name&quot;), employee.getName());</span>
+<span class="fc" id="L31">            Predicate p2 = builder.equal(root.get(&quot;password&quot;), employee.getPassword());</span>
+<span class="fc" id="L32">            Predicate predicate = builder.and(p1, p2);</span>
+<span class="fc" id="L33">            criteriaQuery.select(root).where(predicate);</span>
+
+<span class="fc" id="L35">            Query query = session.createQuery(criteriaQuery);</span>
+<span class="fc" id="L36">            List&lt;Employee&gt; results = query.getResultList();</span>
+
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (results.size() != 1)</span>
+<span class="fc" id="L39">                return null;</span>
+            else {
+<span class="fc" id="L41">                results.get(0).setExpenses(null);</span>
+<span class="fc" id="L42">                return results.get(0);</span>
+            }
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        }</span>
+    }
+
+    @Override
+    public Employee getEmployeeById(int employeeId) {
+<span class="fc" id="L49">        try(Session session = sf.openSession()) {</span>
+
+<span class="fc" id="L51">            CriteriaBuilder builder = sf.getCriteriaBuilder();</span>
+<span class="fc" id="L52">            CriteriaQuery&lt;Employee&gt; criteriaQuery = builder.createQuery(Employee.class);</span>
+<span class="fc" id="L53">            Root&lt;Employee&gt; root = criteriaQuery.from(Employee.class);</span>
+<span class="fc" id="L54">            criteriaQuery.select(root).where(builder.equal(root.get(&quot;employeeId&quot;), employeeId));</span>
+
+<span class="fc" id="L56">            Query query = session.createQuery(criteriaQuery);</span>
+<span class="fc" id="L57">            List&lt;Employee&gt; results = query.getResultList();</span>
+
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (results.size() != 1)</span>
+<span class="fc" id="L60">                return null;</span>
+            else {
+<span class="fc" id="L62">                results.get(0).setExpenses(null);</span>
+<span class="fc" id="L63">                return results.get(0);</span>
+            }
+
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

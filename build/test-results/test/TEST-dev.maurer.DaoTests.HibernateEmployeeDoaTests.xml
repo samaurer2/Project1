@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.maurer.DaoTests.HibernateEmployeeDoaTests" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-03-17T23:19:41" hostname="DESKTOP-RUU1C4G" time="0.91">
+  <properties/>
+  <testcase name="getNonExistentEmployeeById()" classname="dev.maurer.DaoTests.HibernateEmployeeDoaTests" time="0.333"/>
+  <testcase name="getManagerByIdTest()" classname="dev.maurer.DaoTests.HibernateEmployeeDoaTests" time="0.12"/>
+  <testcase name="loginEmployee()" classname="dev.maurer.DaoTests.HibernateEmployeeDoaTests" time="0.124"/>
+  <testcase name="loginManager()" classname="dev.maurer.DaoTests.HibernateEmployeeDoaTests" time="0.116"/>
+  <testcase name="loginNonExistentEmployeeTest()" classname="dev.maurer.DaoTests.HibernateEmployeeDoaTests" time="0.102"/>
+  <testcase name="getEmployeeByIdTest()" classname="dev.maurer.DaoTests.HibernateEmployeeDoaTests" time="0.109"/>
+  <system-out><![CDATA[2021-03-17 18:19:37 INFO  Version:44 - HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-17 18:19:38 INFO  Version:56 - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-17 18:19:38 WARN  pooling:72 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2021-03-17 18:19:38 INFO  pooling:115 - HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://34.67.242.77:5432/testDB]
+2021-03-17 18:19:38 INFO  pooling:124 - HHH10001001: Connection properties: {password=****, user=smaurer}
+2021-03-17 18:19:38 INFO  pooling:129 - HHH10001003: Autocommit mode: false
+2021-03-17 18:19:38 INFO  DriverManagerConnectionProviderImpl:259 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2021-03-17 18:19:39 INFO  Dialect:175 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+Hibernate: alter table if exists expense drop constraint if exists FK546suleufd23su3cpmviybocp
+2021-03-17 18:19:40 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@14a616d5] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: drop table if exists employee cascade
+Hibernate: drop table if exists expense cascade
+Hibernate: create table employee (employee_type varchar(31) not null, employee_id  serial not null, user_name varchar(255) not null, user_password varchar(255) not null, primary key (employee_id))
+2021-03-17 18:19:41 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@71a52f83] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: create table expense (expense_id  serial not null, amount float8 not null, date_approved int8, date_submitted int8, expense_status varchar(255) not null, approval_reason varchar(255), expense_reason varchar(255) not null, employee_employee_id int4, primary key (expense_id))
+Hibernate: alter table if exists employee add constraint UK_o885fqgb71dmn4hp0p6rs4ms4 unique (user_name)
+Hibernate: alter table if exists expense add constraint FK546suleufd23su3cpmviybocp foreign key (employee_employee_id) references employee
+2021-03-17 18:19:41 INFO  JtaPlatformInitiator:52 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+Hibernate: insert into employee (user_name, user_password, employee_type) values (?, ?, 'EMPLOYEE')
+Hibernate: insert into employee (user_name, user_password, employee_type) values (?, ?, 'MANAGER')
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.employee_id=100
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.employee_id=2
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.employee_id=1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Expense.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project1</a> &gt; <a href="index.source.html" class="el_package">dev.maurer.entities</a> &gt; <span class="el_source">Expense.java</span></div><h1>Expense.java</h1><pre class="source lang-java linenums">package dev.maurer.entities;
+
+import org.jetbrains.annotations.NotNull;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name=&quot;expense&quot;)
+public class Expense implements Comparable{
+
+    @Id
+    @Column(name=&quot;expense_id&quot;)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer expenseId;
+
+    @Column(name = &quot;amount&quot;, nullable = false)
+    private Double amount;
+
+    @Column(name = &quot;expense_reason&quot;, nullable = false)
+    private String reasonForExpense;
+
+    @Column(name = &quot;date_submitted&quot;)
+    private Long dateSubmitted;
+
+    @Column(name =&quot;expense_status&quot;, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ExpenseStatus expenseStatus;
+
+    @Column(name = &quot;date_approved&quot;)
+    private Long dateApprovedDenied;
+
+    @Column(name = &quot;approval_reason&quot;)
+    private String reasonForApprovalDenial;
+
+    @ManyToOne
+    private Employee employee;
+
+<span class="fc" id="L38">    public Expense() {</span>
+<span class="fc" id="L39">        this.expenseStatus = ExpenseStatus.PENDING;</span>
+<span class="fc" id="L40">    }</span>
+
+<span class="fc" id="L42">    public Expense(double amount, String reasonForExpense) {</span>
+<span class="fc" id="L43">        this.amount = amount;</span>
+<span class="fc" id="L44">        this.reasonForExpense = reasonForExpense;</span>
+<span class="fc" id="L45">        this.expenseStatus = ExpenseStatus.PENDING;</span>
+<span class="fc" id="L46">    }</span>
+
+    public Integer getExpenseId() {
+<span class="fc" id="L49">        return expenseId;</span>
+    }
+
+    public void setExpenseId(int expenseId) {
+<span class="fc" id="L53">        this.expenseId = expenseId;</span>
+<span class="fc" id="L54">    }</span>
+
+    public Double getAmount() {
+<span class="fc" id="L57">        return amount;</span>
+    }
+
+    public void setAmount(double amount) {
+<span class="fc" id="L61">        this.amount = amount;</span>
+<span class="fc" id="L62">    }</span>
+
+    public String getReasonForExpense() {
+<span class="fc" id="L65">        return reasonForExpense;</span>
+    }
+
+    public void setReasonForExpense(String reasonForExpense) {
+<span class="fc" id="L69">        this.reasonForExpense = reasonForExpense;</span>
+<span class="fc" id="L70">    }</span>
+
+    public Long getDateSubmitted() {
+<span class="fc" id="L73">        return dateSubmitted;</span>
+    }
+
+    public void setDateSubmitted(long dateSubmitted) {
+<span class="fc" id="L77">        this.dateSubmitted = dateSubmitted;</span>
+<span class="fc" id="L78">    }</span>
+
+    public ExpenseStatus getExpenseStatus() {
+<span class="fc" id="L81">        return expenseStatus;</span>
+    }
+
+    public void setExpenseStatus(ExpenseStatus expenseStatus) {
+<span class="fc" id="L85">        this.expenseStatus = expenseStatus;</span>
+<span class="fc" id="L86">    }</span>
+
+    public Long getDateApprovedDenied() {
+<span class="fc" id="L89">        return dateApprovedDenied;</span>
+    }
+
+    public void setDateApprovedDenied(long dateApprovedDenied) {
+<span class="fc" id="L93">        this.dateApprovedDenied = dateApprovedDenied;</span>
+<span class="fc" id="L94">    }</span>
+
+    public String getReasonForApprovalDenial() {
+<span class="fc" id="L97">        return reasonForApprovalDenial;</span>
+    }
+
+    public void setReasonForApprovalDenial(String reasonForApprovalDenial) {
+<span class="fc" id="L101">        this.reasonForApprovalDenial = reasonForApprovalDenial;</span>
+<span class="fc" id="L102">    }</span>
+
+    public Employee employee() {
+<span class="nc" id="L105">        return employee;</span>
+    }
+
+    public void setEmployee(Employee employee) {
+<span class="fc" id="L109">        this.employee = employee;</span>
+<span class="fc" id="L110">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L114">        return &quot;Expense{&quot; +</span>
+                &quot;expenseId=&quot; + expenseId +
+                &quot;, amount=&quot; + amount +
+                &quot;, reasonForExpense='&quot; + reasonForExpense + '\'' +
+                &quot;, dateSubmitted=&quot; + dateSubmitted +
+                &quot;, expenseStatus=&quot; + expenseStatus +
+                &quot;, dateApprovedDenied=&quot; + dateApprovedDenied +
+                &quot;, reasonForApprovalDenial='&quot; + reasonForApprovalDenial + '\'' +
+                &quot;, employee=&quot; + employee +
+                '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull Object object) {
+<span class="nc" id="L128">        Expense expense = (Expense) object;</span>
+
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        if (this.expenseStatus.ordinal() &gt; expense.getExpenseStatus().ordinal())</span>
+<span class="nc" id="L131">            return 1;</span>
+
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (this.expenseStatus.ordinal() &lt; expense.getExpenseStatus().ordinal())</span>
+<span class="nc" id="L134">            return -1;</span>
+
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if(this.dateSubmitted &gt; expense.getDateSubmitted())</span>
+<span class="nc" id="L137">            return -1;</span>
+
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        if(this.dateSubmitted &lt; expense.getDateSubmitted())</span>
+<span class="nc" id="L140">            return 1;</span>
+
+<span class="nc" id="L142">        return 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

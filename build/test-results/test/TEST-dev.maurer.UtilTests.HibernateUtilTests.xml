@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.maurer.UtilTests.HibernateUtilTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-03-17T23:19:47" hostname="DESKTOP-RUU1C4G" time="0.001">
+  <properties/>
+  <testcase name="createSessionFactoryTest()" classname="dev.maurer.UtilTests.HibernateUtilTests" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

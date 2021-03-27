@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.maurer.ServiceTests.ExpenseServiceTests" tests="6" skipped="0" failures="0" errors="0" timestamp="2021-03-17T23:19:47" hostname="DESKTOP-RUU1C4G" time="0.021">
+  <properties/>
+  <testcase name="submitExpenseServiceTest()" classname="dev.maurer.ServiceTests.ExpenseServiceTests" time="0.013"/>
+  <testcase name="getAllExpensesEmployeeServiceTest()" classname="dev.maurer.ServiceTests.ExpenseServiceTests" time="0.001"/>
+  <testcase name="getAllExpensesManagerServiceTest()" classname="dev.maurer.ServiceTests.ExpenseServiceTests" time="0.0"/>
+  <testcase name="getExpenseServiceTest()" classname="dev.maurer.ServiceTests.ExpenseServiceTests" time="0.0"/>
+  <testcase name="updateExpenseServiceTest()" classname="dev.maurer.ServiceTests.ExpenseServiceTests" time="0.002"/>
+  <testcase name="getExpenseByIdExceptionTest()" classname="dev.maurer.ServiceTests.ExpenseServiceTests" time="0.002"/>
+  <system-out><![CDATA[Expense{expenseId=4, amount=100.0, reasonForExpense='The big dummy data', dateSubmitted=null, expenseStatus=PENDING, dateApprovedDenied=null, reasonForApprovalDenial='null', employee=Employee{employeeId=1, name='Annie'}}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

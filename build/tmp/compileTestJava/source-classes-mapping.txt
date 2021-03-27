@@ -1,0 +1,12 @@
+dev/maurer/UtilTests/HibernateUtilTests.java
+ dev.maurer.UtilTests.HibernateUtilTests
+dev/maurer/ServiceTests/EmployeeServiceTests.java
+ dev.maurer.ServiceTests.EmployeeServiceTests
+dev/maurer/DaoTests/HibernateExpenseDaoTests.java
+ dev.maurer.DaoTests.HibernateExpenseDaoTests
+dev/maurer/ServiceTests/ExpenseServiceTests.java
+ dev.maurer.ServiceTests.ExpenseServiceTests
+dev/maurer/DaoTests/HibernateEmployeeDoaTests.java
+ dev.maurer.DaoTests.HibernateEmployeeDoaTests
+dev/maurer/ServiceTests/EmployeeMatcher.java
+ dev.maurer.ServiceTests.EmployeeMatcher

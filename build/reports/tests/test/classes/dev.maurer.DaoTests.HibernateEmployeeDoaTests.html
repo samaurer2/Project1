@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class dev.maurer.DaoTests.HibernateEmployeeDoaTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class dev.maurer.DaoTests.HibernateEmployeeDoaTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/dev.maurer.DaoTests.html">dev.maurer.DaoTests</a> &gt; HibernateEmployeeDoaTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">6</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.904s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">getEmployeeByIdTest()</td>
+<td class="success">0.109s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">getManagerByIdTest()</td>
+<td class="success">0.120s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">getNonExistentEmployeeById()</td>
+<td class="success">0.333s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">loginEmployee()</td>
+<td class="success">0.124s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">loginManager()</td>
+<td class="success">0.116s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">loginNonExistentEmployeeTest()</td>
+<td class="success">0.102s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2021-03-17 18:19:37 INFO  Version:44 - HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-03-17 18:19:38 INFO  Version:56 - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-17 18:19:38 WARN  pooling:72 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2021-03-17 18:19:38 INFO  pooling:115 - HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://34.67.242.77:5432/testDB]
+2021-03-17 18:19:38 INFO  pooling:124 - HHH10001001: Connection properties: {password=****, user=smaurer}
+2021-03-17 18:19:38 INFO  pooling:129 - HHH10001003: Autocommit mode: false
+2021-03-17 18:19:38 INFO  DriverManagerConnectionProviderImpl:259 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2021-03-17 18:19:39 INFO  Dialect:175 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+Hibernate: alter table if exists expense drop constraint if exists FK546suleufd23su3cpmviybocp
+2021-03-17 18:19:40 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@14a616d5] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: drop table if exists employee cascade
+Hibernate: drop table if exists expense cascade
+Hibernate: create table employee (employee_type varchar(31) not null, employee_id  serial not null, user_name varchar(255) not null, user_password varchar(255) not null, primary key (employee_id))
+2021-03-17 18:19:41 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@71a52f83] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: create table expense (expense_id  serial not null, amount float8 not null, date_approved int8, date_submitted int8, expense_status varchar(255) not null, approval_reason varchar(255), expense_reason varchar(255) not null, employee_employee_id int4, primary key (expense_id))
+Hibernate: alter table if exists employee add constraint UK_o885fqgb71dmn4hp0p6rs4ms4 unique (user_name)
+Hibernate: alter table if exists expense add constraint FK546suleufd23su3cpmviybocp foreign key (employee_employee_id) references employee
+2021-03-17 18:19:41 INFO  JtaPlatformInitiator:52 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+Hibernate: insert into employee (user_name, user_password, employee_type) values (?, ?, 'EMPLOYEE')
+Hibernate: insert into employee (user_name, user_password, employee_type) values (?, ?, 'MANAGER')
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.employee_id=100
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.employee_id=2
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.employee_id=1
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 6.6.1</a> at Mar 17, 2021, 6:19:47 PM</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.maurer.DaoTests.HibernateExpenseDaoTests" tests="12" skipped="0" failures="0" errors="0" timestamp="2021-03-17T23:19:44" hostname="DESKTOP-RUU1C4G" time="3.085">
+  <properties/>
+  <testcase name="getExpensesEmployeeTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.302"/>
+  <testcase name="getExpensesManagerTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.314"/>
+  <testcase name="getExpenseTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.251"/>
+  <testcase name="submitExpenseTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.474"/>
+  <testcase name="getExpenseManagerTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.271"/>
+  <testcase name="updateExpenseTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.842"/>
+  <testcase name="submitNonExistentEmployeeTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.106"/>
+  <testcase name="viewAllExpensesNonExistentEmployeeTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.099"/>
+  <testcase name="viewAllExpensesNonExistentManagerTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.11"/>
+  <testcase name="viewNonExistentExpenseTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.107"/>
+  <testcase name="viewAllNonExistentManagerExpensesTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.099"/>
+  <testcase name="updateExpenseNonExistantManagerTest()" classname="dev.maurer.DaoTests.HibernateExpenseDaoTests" time="0.099"/>
+  <system-out><![CDATA[2021-03-17 18:19:42 WARN  pooling:72 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2021-03-17 18:19:42 INFO  pooling:115 - HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://34.67.242.77:5432/testDB]
+2021-03-17 18:19:42 INFO  pooling:124 - HHH10001001: Connection properties: {password=****, user=smaurer}
+2021-03-17 18:19:42 INFO  pooling:129 - HHH10001003: Autocommit mode: false
+2021-03-17 18:19:42 INFO  DriverManagerConnectionProviderImpl:259 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2021-03-17 18:19:42 INFO  Dialect:175 - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+Hibernate: alter table if exists expense drop constraint if exists FK546suleufd23su3cpmviybocp
+2021-03-17 18:19:43 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@1e2a6fe5] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: drop table if exists employee cascade
+Hibernate: drop table if exists expense cascade
+Hibernate: create table employee (employee_type varchar(31) not null, employee_id  serial not null, user_name varchar(255) not null, user_password varchar(255) not null, primary key (employee_id))
+2021-03-17 18:19:43 INFO  access:47 - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@57fdbca4] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Hibernate: create table expense (expense_id  serial not null, amount float8 not null, date_approved int8, date_submitted int8, expense_status varchar(255) not null, approval_reason varchar(255), expense_reason varchar(255) not null, employee_employee_id int4, primary key (expense_id))
+Hibernate: alter table if exists employee add constraint UK_o885fqgb71dmn4hp0p6rs4ms4 unique (user_name)
+Hibernate: alter table if exists expense add constraint FK546suleufd23su3cpmviybocp foreign key (employee_employee_id) references employee
+2021-03-17 18:19:43 INFO  JtaPlatformInitiator:52 - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+Hibernate: insert into employee (user_name, user_password, employee_type) values (?, ?, 'EMPLOYEE')
+Hibernate: insert into employee (user_name, user_password, employee_type) values (?, ?, 'EMPLOYEE')
+Hibernate: insert into employee (user_name, user_password, employee_type) values (?, ?, 'MANAGER')
+Hibernate: insert into expense (amount, date_approved, date_submitted, employee_employee_id, expense_status, approval_reason, expense_reason) values (?, ?, ?, ?, ?, ?, ?)
+Hibernate: insert into expense (amount, date_approved, date_submitted, employee_employee_id, expense_status, approval_reason, expense_reason) values (?, ?, ?, ?, ?, ?, ?)
+Hibernate: insert into expense (amount, date_approved, date_submitted, employee_employee_id, expense_status, approval_reason, expense_reason) values (?, ?, ?, ?, ?, ?, ?)
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select expense0_.expense_id as expense_1_1_, expense0_.amount as amount2_1_, expense0_.date_approved as date_app3_1_, expense0_.date_submitted as date_sub4_1_, expense0_.employee_employee_id as employee8_1_, expense0_.expense_status as expense_5_1_, expense0_.approval_reason as approval6_1_, expense0_.expense_reason as expense_7_1_ from expense expense0_ where expense0_.employee_employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select expense0_.expense_id as expense_1_1_, expense0_.amount as amount2_1_, expense0_.date_approved as date_app3_1_, expense0_.date_submitted as date_sub4_1_, expense0_.employee_employee_id as employee8_1_, expense0_.expense_status as expense_5_1_, expense0_.approval_reason as approval6_1_, expense0_.expense_reason as expense_7_1_ from expense expense0_
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Employee{employeeId=0, name='Teemo'}
+Hibernate: select expense0_.expense_id as expense_1_1_, expense0_.amount as amount2_1_, expense0_.date_approved as date_app3_1_, expense0_.date_submitted as date_sub4_1_, expense0_.employee_employee_id as employee8_1_, expense0_.expense_status as expense_5_1_, expense0_.approval_reason as approval6_1_, expense0_.expense_reason as expense_7_1_ from expense expense0_ where expense0_.employee_employee_id=2 and expense0_.expense_id=2
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: insert into expense (amount, date_approved, date_submitted, employee_employee_id, expense_status, approval_reason, expense_reason) values (?, ?, ?, ?, ?, ?, ?)
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select expense0_.expense_id as expense_1_1_, expense0_.amount as amount2_1_, expense0_.date_approved as date_app3_1_, expense0_.date_submitted as date_sub4_1_, expense0_.employee_employee_id as employee8_1_, expense0_.expense_status as expense_5_1_, expense0_.approval_reason as approval6_1_, expense0_.expense_reason as expense_7_1_ from expense expense0_ where expense0_.employee_employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Employee{employeeId=0, name='Dr. Mundo'}
+Hibernate: select expense0_.expense_id as expense_1_1_, expense0_.amount as amount2_1_, expense0_.date_approved as date_app3_1_, expense0_.date_submitted as date_sub4_1_, expense0_.employee_employee_id as employee8_1_, expense0_.expense_status as expense_5_1_, expense0_.approval_reason as approval6_1_, expense0_.expense_reason as expense_7_1_ from expense expense0_ where expense0_.expense_id=2
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Employee{employeeId=0, name='Dr. Mundo'}
+Hibernate: select expense0_.expense_id as expense_1_1_, expense0_.amount as amount2_1_, expense0_.date_approved as date_app3_1_, expense0_.date_submitted as date_sub4_1_, expense0_.employee_employee_id as employee8_1_, expense0_.expense_status as expense_5_1_, expense0_.approval_reason as approval6_1_, expense0_.expense_reason as expense_7_1_ from expense expense0_ where expense0_.expense_id=2
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select expense0_.expense_id as expense_1_1_0_, expense0_.amount as amount2_1_0_, expense0_.date_approved as date_app3_1_0_, expense0_.date_submitted as date_sub4_1_0_, expense0_.employee_employee_id as employee8_1_0_, expense0_.expense_status as expense_5_1_0_, expense0_.approval_reason as approval6_1_0_, expense0_.expense_reason as expense_7_1_0_, employee1_.employee_id as employee2_0_1_, employee1_.user_name as user_nam3_0_1_, employee1_.user_password as user_pas4_0_1_, employee1_.employee_type as employee1_0_1_ from expense expense0_ left outer join employee employee1_ on expense0_.employee_employee_id=employee1_.employee_id where expense0_.expense_id=?
+Expense{expenseId=2, amount=50.0, reasonForExpense='Need a bigger backpack told hold mushrooms', dateSubmitted=null, expenseStatus=PENDING, dateApprovedDenied=null, reasonForApprovalDenial='null', employee=Employee{employeeId=2, name='Teemo'}}
+Hibernate: update expense set amount=?, date_approved=?, date_submitted=?, employee_employee_id=?, expense_status=?, approval_reason=?, expense_reason=? where expense_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Employee{employeeId=0, name='Dr. Mundo'}
+Hibernate: select expense0_.expense_id as expense_1_1_, expense0_.amount as amount2_1_, expense0_.date_approved as date_app3_1_, expense0_.date_submitted as date_sub4_1_, expense0_.employee_employee_id as employee8_1_, expense0_.expense_status as expense_5_1_, expense0_.approval_reason as approval6_1_, expense0_.expense_reason as expense_7_1_ from expense expense0_ where expense0_.expense_id=2
+Hibernate: select employee0_.employee_id as employee2_0_0_, employee0_.user_name as user_nam3_0_0_, employee0_.user_password as user_pas4_0_0_, employee0_.employee_type as employee1_0_0_ from employee employee0_ where employee0_.employee_id=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Employee{employeeId=0, name='Dr. Mundo'}
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+Hibernate: select employee0_.employee_id as employee2_0_, employee0_.user_name as user_nam3_0_, employee0_.user_password as user_pas4_0_, employee0_.employee_type as employee1_0_ from employee employee0_ where employee0_.user_name=? and employee0_.user_password=?
+2021-03-17 18:19:47 INFO  pooling:428 - HHH10001008: Cleaning up connection pool [jdbc:postgresql://34.67.242.77:5432/testDB]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
